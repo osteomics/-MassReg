@@ -1,0 +1,33 @@
+---
+title: "RegMass Data Visualization"
+author: "João Coelho"
+date: "3 de Agosto de 2015"
+output: html_document
+---
+
+
+```{r, warning=FALSE, fig.width=12, fig.height=12, cache=TRUE}
+dt <- read.csv(file = "data/massReg-processed.csv", header = T, sep = ",")
+library(gplots)
+library(PerformanceAnalytics)
+
+
+ht <- data.matrix(dt[,6:46])
+heatmap.2(ht, srtCol=315, hclustfun = hclust, symm = FALSE,
+          Rowv=FALSE, Colv=FALSE, adjCol = c(0,1), scale = "column")
+
+```
+
+```{r, warning=FALSE, fig.width=12, fig.height=12, cache=TRUE}
+chart.Correlation(ht) # I know, hard to see, let's separate top and lower body...
+```
+
+```{r, warning=FALSE, fig.width=12, fig.height=12, cache=TRUE}
+# Arm bones
+chart.Correlation(data.matrix(dt[,c(6,8,10,12,14,16,44,46)]))
+```
+
+```{r, warning=FALSE, fig.width=12, fig.height=12, cache=TRUE}
+# Leg bones
+chart.Correlation(data.matrix(dt[,c(18,20,22,24,26,28,30,32,34,36,38,40,42,45,46)]))
+```
