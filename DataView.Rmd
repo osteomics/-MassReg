@@ -13,6 +13,7 @@ library(PerformanceAnalytics)
 
 
 ht <- data.matrix(dt[,6:46])
+rownames(ht) <- dt$ID
 heatmap.2(ht, srtCol=315, hclustfun = hclust, symm = FALSE,
           Rowv=FALSE, Colv=FALSE, adjCol = c(0,1), scale = "column")
 
