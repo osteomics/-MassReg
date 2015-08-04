@@ -1,0 +1,18 @@
+{
+    "contents" : "# main file for Gonçalves et al. Skeletal Mass Regression Project\n#\n# Keypoints to address in this project:\n#\n# Regression model complexity, assumptions, peer-acceptance\n# Missing value handling\n# Bilateral values handling\n# Colinearity, colinearity everywhere...\n\n# read data.frame\ndf <- df <- read.csv('./data/massReg-processed.csv')\n\n# split into different data.frame structures to ease up data analysis\nbio <- df[, c(\"SEX\",\"AGE\")] # biological profile data, SEX and AGE\ntotal.mass <- df[, \"TOTAL.MASS\"] # target variable, total skeletal mass\nlongbones.l <- df[, c(\"HMR.L\",\"FMR.L\")] # left femur and humerus\nclavicles <- df[, 5:6] \nmetacarpals <- df[, 7:16]\npatellas <- df[, 17:18]\ntarsals <- df[, 19:32]\nmetatarsals <- df[, 33:42]\n# variable names\nvar.names.lr <- c(colnames(clavicles),colnames(metacarpals),colnames(patellas),\n                  colnames(tarsals),colnames(metatarsals))\nvar.names.idx <- grep(pattern = \".L\",var.names.lr,fixed = TRUE)\nvar.names <- gsub(pattern = \".L\", replacement = \"\", \n                  x = var.names.lr[var.names.idx],fixed = TRUE)\n\n## Handling bilateral values\n# auxiliar function\nbilateral.asymmetry <- function (m, sig = 0.01) {\n  # Test for bilateral asymmetry using relative directional asymmetry and \n  # Wilcoxon signed ranks test.\n  #\n  # m: a n-by-2 matrix contrain antimeres of a bilateral bone\n  # note: matrix is order from left to right\n  \n  idx <- complete.cases(m)\n  m.aux <- m[idx,]\n  wcx.paired <- wilcox.test(x = m.aux[,1],y = m.aux[,2], exact = F, paired=T)\n  if(wcx.paired$p.value <= sig){\n    asymm <- TRUE \n  }else{\n    asymm <- FALSE\n  }\n  da <- ((m.aux[,2]-m.aux[,1])/apply(m.aux, 1, mean))*100\n  da <- median(da)\n  \n  res <- list(DA = da, statistic= as.numeric(wcx.paired$statistic), \n              p.value = wcx.paired$p.value, n = NROW(m.aux), asymm = asymm)\n  return(res)\n}\n\n# testing for bilateral asymmetry\nresult <- vector()\nresult <- rbind(result, unlist(bilateral.asymmetry(clavicles)))\nfor(i in seq(1,NCOL(metacarpals),2)){\n  m <- cbind(metacarpals[,i],metacarpals[,i+1])\n  result <- rbind(result, unlist(bilateral.asymmetry(m)))\n}\nresult <- rbind(result, unlist(bilateral.asymmetry(patellas)))\nfor(i in seq(1,NCOL(tarsals),2)){\n  m <- cbind(tarsals[,i],tarsals[,i+1])\n  result <- rbind(result, unlist(bilateral.asymmetry(m)))\n}\nfor(i in seq(1,NCOL(metatarsals),2)){\n  m <- cbind(metatarsals[,i],metatarsals[,i+1])\n  result <- rbind(result, unlist(bilateral.asymmetry(m)))\n}\nrownames(result) <- var.names\n",
+    "created" : 1438707362796.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1695685973",
+    "id" : "E6C9B240",
+    "lastKnownWriteTime" : 1438718635,
+    "path" : "C:/Storage Services/Copy/projects/goncalves-et-al-massRegression/main.R",
+    "project_path" : "main.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

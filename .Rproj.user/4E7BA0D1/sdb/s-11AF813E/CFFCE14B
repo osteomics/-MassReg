@@ -1,0 +1,17 @@
+{
+    "contents" : "cdens <- vector()\nfor(j in 1:nrow(pattern)){\n    \n\nKx <- function(x,xi, sigma.x=1) {\n    d <- apply(X = sweep(x = x, MARGIN = 2, STATS = as.numeric(xi), FUN = \"-\")^2, \n               MARGIN = 1,FUN = sum)\n    res <- exp(-0.5*(d/sigma.x^2))\n    return(round(cbind(res),4))\n}\n\nKy <- function(y, yi, sigma.y=317.1) {\n    d <- (y - yi)^2\n    res <- exp(-0.5*(d/sigma.y^2))\n    return(round(cbind(res),5))\n}\n\nxi <- x[5, ]\ndens <- vector()\nfor(i in domain) {\n    constant <- (1/((2*pi)^((ncol(x)+1)/2))*(1^(ncol(x)+1)))\n    dens <- c(dens,(constant)*(1/nrow(x))*sum(Kx(x = x, xi = xi)*Ky(y, i)))\n\n}\n\nfx <- approxfun(domain,dens/all,yright = 0,yleft = 0)\ndenom <- integrate(fx,lower = min(domain),upper = max(domain))$value\nfx <- approxfun(domain,fx(domain)/denom,yright=0,yleft=0)\nplot(domain,fx(domain), type = \"l\")\n\n\ncdens <- rbind(cdens,dens/all)\n}\n\n\n\n\n#\ncdf <- function(x){\n  integrate(fx,min(domain),x)$value\n}\ncdf <- Vectorize(cdf)\n\nicdf <- function(q){\n  f.aux <- function(x){\n    cdf(x)-q\n  }\n  bisect(f.aux,a=min(domain),b=max(domain))$root\n}\n\nsynth <- vector()\nfor(i in 1:length(domain)){\n  X <- head(pattern[order(cdens[,i],decreasing = T),], 16)\n  tx <- vector()\n  for (j in 1:NCOL(X)) {\n    t <- tabulate(X[,j])\n    tx[j] <- \n      # which.max(t)\n      sample(1:length(t), 1,prob = t/16)\n  }\n  # tx <- apply(X,2,median)\n  synth <- rbind(synth,tx)\n}\n",
+    "created" : 1438598490779.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2040160023",
+    "id" : "CFFCE14B",
+    "lastKnownWriteTime" : 1438354402,
+    "path" : "~/Copy/grnn/draft-denn.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

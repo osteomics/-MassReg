@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1438617069431.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "555442C2",
+    "lastKnownWriteTime" : 57858240,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "ri2e9nak4w",
+        "caption" : "dt2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dt2&cache_key=ri2e9nak4w",
+        "displayedObservations" : "57",
+        "environment" : "",
+        "object" : "dt2",
+        "totalObservations" : "57",
+        "variables" : "4"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
