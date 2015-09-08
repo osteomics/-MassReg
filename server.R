@@ -15,17 +15,16 @@ shinyServer(function(input, output) {
     paste0(names(x), ": ", format(x), collapse = "<br />")
   }
   
-  slid <- reactive(input$slid)
   
   reactive({ plotData() %>%
       ggvis(x = ~x, y = ~y) %>%
       layer_points() %>%
-      layer_smooths(span = slid, se = TRUE) %>%
+      layer_smooths(span = input$slid, se = TRUE) %>%
       add_tooltip(all_values, "hover") %>%
       add_axis("y", title = " ")  %>%
       add_axis("x", title = " ") %>%
       set_options(width = "auto", height = "auto")
-  }) %>%  bind_shiny("p", "p_ui")
+  }) %>% bind_shiny("p", "p_ui")
   
   output$heatmap <- renderPlot({
     ht.mat <- as.matrix(scale(ht))
@@ -39,10 +38,10 @@ shinyServer(function(input, output) {
   corrM <- reactive(input$corrm)
   corrS <- reactive({
     a[[as.numeric(input$ul)]]
-    })
+  })
   
   output$ulBody <- renderPlot({
     suppressWarnings(chart.Correlation(R = corrS(), method = corrM()))
-    })
+  })
 })
 
