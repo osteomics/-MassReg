@@ -2,6 +2,10 @@ library(shiny)
 
 shinyServer(function(input, output) {
   
+  ul.metrics <- readRDS("ulmetrics.RDS")
+  ul.regrCoefficients <- readRDS("ulregr.RDS")
+  assymTab <- readRDS("assymTab.RDS")
+  
   plotData <- reactive({
     df <- ht[, c(input$xcol, input$ycol)]
     df <- df[complete.cases(df),]
@@ -37,11 +41,42 @@ shinyServer(function(input, output) {
   
   corrM <- reactive(input$corrm)
   corrS <- reactive({
-    a[[as.numeric(input$ul)]]
+    lista[[as.numeric(input$ul)]]
   })
+  
+  output$tb <- renderTable(assymTab)
   
   output$ulBody <- renderPlot({
     suppressWarnings(chart.Correlation(R = corrS(), method = corrM()))
   })
+  
+  modData <- reactive({
+    df <- ht[, c(input$Xcol, input$Ycol)]
+    df <- df[complete.cases(df),]
+    names(df) <- c("x", "y")
+    df$id <- 1:nrow(df)
+    df
+  })
+  
+  model <- reactive({lm(y ~ x, data = modData())})
+  
+  output$lmmod <- renderTable({
+    summary(model())$coefficients
+  })
+  
+  output$num <- renderPrint({ input$num })
+  
+  output$pred <- renderPrint({as.numeric(
+    predict(model(), data.frame(x = as.numeric(input$num))))
+  })
+  
+  output$diag <- renderPlot({
+    par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+    plot(model())
+    })
+  
+  output$tab1 <- renderTable({ul.regrCoefficients})
+  output$tab2 <- renderTable({ul.metrics})
+  
 })
 

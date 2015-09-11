@@ -82,6 +82,6 @@ rownames(result) <- var.names
 
 
 ```{r}
-kable(result)
+testoui <- kable(result)
 ```
 
