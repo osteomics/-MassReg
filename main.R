@@ -78,6 +78,7 @@ rownames(result) <- var.names
 # write bilateral asymmetry results to csv file
 write.csv(result,"./results/asymmetry.csv")
 
+<<<<<<< HEAD
 # CORRELATION ANALYSIS
 cor.matrix <- function(x, method = 'pearson', na.rm=TRUE){
   
@@ -102,6 +103,8 @@ cor.matrix <- function(x, method = 'pearson', na.rm=TRUE){
 write.csv(cor.matrix(dtu), file = './results/cmatrixUpper.csv')
 write.csv(cor.matrix(dtl), file = './results/cmatrixLower.csv')
 
+=======
+>>>>>>> origin/master
 # PREDICTIVE ANALYSIS
 # LINEAR REGRESSION - LOO VALIDATION
 # UPPER  AND LOWER LIMB
@@ -140,10 +143,16 @@ ul.regrCoefficients <- data.frame(Intercept = regrCoefficients[, 1],
                               X = regrCoefficients[, 2])
 rownames(ul.metrics) <- colnames(upper.lower.limb)
 rownames(ul.regrCoefficients) <- colnames(upper.lower.limb)
+<<<<<<< HEAD
 
 # write.results
 write.csv(round(ul.metrics, 3), './results/accuracy.csv')
 write.csv(round(ul.regrCoefficients, 3), './results/coefficients.csv')
+=======
+# write.results
+write.csv(round(ul.metrics, 3),'./results/accuracy.csv')
+write.csv(round(ul.regrCoefficients, 3),'./results/coefficients.csv')
+>>>>>>> origin/master
 
   
 # # PREDICTIVE ANALYSIS
