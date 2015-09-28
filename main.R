@@ -78,7 +78,7 @@ rownames(result) <- var.names
 # write bilateral asymmetry results to csv file
 write.csv(result,"./results/asymmetry.csv")
 
-<<<<<<< HEAD
+
 # CORRELATION ANALYSIS
 cor.matrix <- function(x, method = 'pearson', na.rm=TRUE){
   
@@ -103,8 +103,6 @@ cor.matrix <- function(x, method = 'pearson', na.rm=TRUE){
 write.csv(cor.matrix(dtu), file = './results/cmatrixUpper.csv')
 write.csv(cor.matrix(dtl), file = './results/cmatrixLower.csv')
 
-=======
->>>>>>> origin/master
 # PREDICTIVE ANALYSIS
 # LINEAR REGRESSION - LOO VALIDATION
 # UPPER  AND LOWER LIMB
@@ -143,18 +141,74 @@ ul.regrCoefficients <- data.frame(Intercept = regrCoefficients[, 1],
                               X = regrCoefficients[, 2])
 rownames(ul.metrics) <- colnames(upper.lower.limb)
 rownames(ul.regrCoefficients) <- colnames(upper.lower.limb)
-<<<<<<< HEAD
 
 # write.results
 write.csv(round(ul.metrics, 3), './results/accuracy.csv')
 write.csv(round(ul.regrCoefficients, 3), './results/coefficients.csv')
-=======
+
 # write.results
 write.csv(round(ul.metrics, 3),'./results/accuracy.csv')
 write.csv(round(ul.regrCoefficients, 3),'./results/coefficients.csv')
->>>>>>> origin/master
 
+# # PREDICTIVE ANALYSIS PC Regression DTU
+N <- 60
+yhat <- vector()
+dtu <- knnImputation(dtu,3)
+x <- dtu[,-NCOL(dtu)]
+y <- dtu[,NCOL(dtu)]
+for(i in seq(1, N, 1)){
+  y.train <- y[-i]
+  x.train <- x[-i, ]
+  x.test <- x[i, ]
+  pc.model <- princomp(x.train)
+  x.train <- predict(pc.model, x.train)[, 1]
+  x.test <- predict(pc.model, x.test)[, 1]
   
+  lrModel <- lm(y.train ~ x.train, data.frame(y.train = y.train,
+                                              x.train = x.train))
+  yhat[i] <- predict(lrModel, data.frame(x.train = x.test))
+  
+}
+
+pc.model <- princomp(x)
+xpc <- predict(pc.model, x)[,1]
+lrModel <- lm(y ~ xpc)
+pc.var.dtu <- pc.model$sdev^2/sum(pc.model$sdev^2)
+rmse.dtu <- sqrt(mean((yhat-y)^2))
+rsq.dtu <- cor(yhat,y)^2
+regrCoefficients.dtu <- as.numeric(coefficients(lrModel))
+pcCoeff.dtu <- eigen(cov(x))$vectors[, 1]
+
+# # PREDICTIVE ANALYSIS PC Regression DTL
+N <- 60
+yhat <- vector()
+dtl <- knnImputation(dtl,3)
+x <- dtl[,-NCOL(dtl)]
+y <- dtl[,NCOL(dtl)]
+for(i in seq(1, N, 1)){
+  y.train <- y[-i]
+  x.train <- x[-i, ]
+  x.test <- x[i, ]
+  pc.model <- princomp(x.train)
+  x.train <- predict(pc.model, x.train)[, 1]
+  x.test <- predict(pc.model, x.test)[, 1]
+  
+  lrModel <- lm(y.train ~ x.train, data.frame(y.train = y.train,
+                                              x.train = x.train))
+  yhat[i] <- predict(lrModel, data.frame(x.train = x.test))
+  
+}
+
+pc.model <- princomp(x)
+xpc <- predict(pc.model, x)[,1]
+lrModel <- lm(y ~ xpc)
+pc.var.dtl <- pc.model$sdev^2/sum(pc.model$sdev^2)
+rmse.dtl <- sqrt(mean((yhat-y)^2))
+rsq.dtl <- cor(yhat,y)^2
+regrCoefficients.dtl <- as.numeric(coefficients(lrModel))
+pcCoeff.dtl <- eigen(cov(x))$vectors[, 1]
+
+
 # # PREDICTIVE ANALYSIS
 # # DENSITY ESTIMATION ALGORITHM - LOO VALIDATION
 # # UPPER  AND LOWER LIMB
