@@ -102,6 +102,8 @@ cor.matrix <- function(x, method = 'pearson', na.rm=TRUE){
 # compute and write
 write.csv(cor.matrix(dtu), file = './results/cmatrixUpper.csv')
 write.csv(cor.matrix(dtl), file = './results/cmatrixLower.csv')
+ht <- df[,5:45]
+write.csv(cor.matrix(ht), file = './results/cmatrixTotal.csv')
 
 # PREDICTIVE ANALYSIS
 # LINEAR REGRESSION - LOO VALIDATION
