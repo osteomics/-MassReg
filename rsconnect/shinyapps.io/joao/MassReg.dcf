@@ -1,4 +1,6 @@
 name: MassReg
 account: joao
-bundleId: 262081
+server: shinyapps.io
+bundleId: 277220
 url: https://joao.shinyapps.io/MassReg
+when: 1443549569.40089

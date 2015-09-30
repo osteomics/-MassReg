@@ -66,14 +66,24 @@ shinyServer(function(input, output) {
   
   output$num <- renderPrint({ input$num })
   
-  output$pred <- renderPrint({as.numeric(
-    predict(model(), data.frame(x = as.numeric(input$num))))
+  output$pred <- renderTable({
+    predictions <- predict.lm(model(), data.frame(x = as.numeric(input$num)),
+                              interval = "prediction")
+    fitTable <- as.table(
+      matrix(c(
+        as.numeric(predictions[[1]]),
+        as.numeric(predictions[[2]]),
+        as.numeric(predictions[[3]])),
+        c(1,3)))
+    colnames(fitTable) <- c("Fit", "Minimum", "Maximum")
+    rownames(fitTable) <- c("Predictions")
+    fitTable
   })
   
   output$diag <- renderPlot({
     par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
     plot(model())
-    })
+  })
   
   output$tab1 <- renderTable({ul.regrCoefficients})
   output$tab2 <- renderTable({ul.metrics})

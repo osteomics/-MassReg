@@ -2,6 +2,7 @@ library(shiny)
 library(ggvis)
 library(gplots)
 library(PerformanceAnalytics)
+library(knitr)
 source("helpers.R")
 
 
@@ -101,7 +102,7 @@ shinyUI(
                     selectInput('Xcol', 'X Variable', names(ht)),
                     selectInput('Ycol', 'Y Variable', names(ht),
                                 selected = names(ht)[[41]]),
-                    numericInput("num", label = "Your Numeric Input", value = 1),
+                    numericInput("num", label = "Your Numeric Input", value = 10),
                     hr(),
                     p("Current Value:", style = "color:#888888;"), 
                     verbatimTextOutput("num")
@@ -109,14 +110,14 @@ shinyUI(
                   mainPanel(
                     tableOutput("lmmod"),
                     p("Total skeleton mass, based on your input value is:"),
-                    textOutput("pred"),
+                    tableOutput("pred"),
                     plotOutput("diag")
                   )
                 )
               ),
               tabPanel("About",
                        h2("Authors"),
-                       p(strong("David Gonçalves,"), "Maria Alejandra Acosta, Catarina Coelho, João Coelho, Francisco Curate, Maria Teresa Ferreira, Márcia Gouveia, Calil Makhoul, David Navega, Débora Pinto, Inês Santos, Ana Vassalo, Eugénia Cunha."),
+                       p("David Gonçalves,", "Maria Alejandra Acosta, Catarina Coelho, João Coelho, Francisco Curate, Maria Teresa Ferreira, Márcia Gouveia, Calil Makhoul, David Navega, Débora Pinto, Inês Santos, Ana Vassalo, Eugénia Cunha."),
                        em("Life Sciences Department, University of Coimbra"),
                        h2("Data Analysis & App Development"),
                        p("João Coelho"),
