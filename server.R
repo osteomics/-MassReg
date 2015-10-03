@@ -19,7 +19,6 @@ shinyServer(function(input, output) {
     paste0(names(x), ": ", format(x), collapse = "<br />")
   }
   
-  
   reactive({ plotData() %>%
       ggvis(x = ~x, y = ~y) %>%
       layer_points() %>%
