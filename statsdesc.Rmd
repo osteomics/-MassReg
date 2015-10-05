@@ -2,13 +2,15 @@
 title: "STATS DESC"
 author: "David Navega, João Coelho"
 date: "29 de Setembro de 2015"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r}
 library(knitr)
 getwd()
-dt <- read.csv(file = "./ΣMassReg/data/massReg-processed.csv", header = T, sep = ",")
+dt <- read.csv(file = "./data/massReg-processed.csv", header = T, sep = ",")
 ht <- dt[,5:45]
 library(pastecs)
 kable(stat.desc(ht, norm = T), digits = 2)
